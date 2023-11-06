@@ -4,10 +4,10 @@ import 'package:starter_architecture_flutter_firebase/src/features/jobs/domain/j
 void main() {
   group('fromMap', () {
     test('job with all properties', () {
-      final job = Job.fromJson(const {
+      final job = Job.fromMap(const {
         'name': 'Blogging',
         'ratePerHour': 10,
-      });
+      }, 'abc');
       expect(job, const Job(name: 'Blogging', ratePerHour: 10, id: 'abc'));
     });
 
@@ -16,9 +16,9 @@ void main() {
       // * _CastError:<type 'Null' is not a subtype of type 'String' in type cast>
       // * We can detect it by expecting that the test throws a TypeError
       expect(
-          () => Job.fromJson(const {
+          () => Job.fromMap(const {
                 'ratePerHour': 10,
-              }),
+              }, 'abc'),
           throwsA(isInstanceOf<TypeError>()));
     });
   });
@@ -26,7 +26,7 @@ void main() {
   group('toMap', () {
     test('valid name, ratePerHour', () {
       const job = Job(name: 'Blogging', ratePerHour: 10, id: 'abc');
-      expect(job.toJson(), {
+      expect(job.toMap(), {
         'name': 'Blogging',
         'ratePerHour': 10,
       });

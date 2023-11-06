@@ -30,7 +30,7 @@ class JobsRepository {
 
   // update
   Future<void> updateJob({required UserID uid, required Job job}) =>
-      _firestore.doc(jobPath(uid, job.id)).update(job.toJson());
+      _firestore.doc(jobPath(uid, job.id)).update(job.toMap());
 
   // delete
   Future<void> deleteJob({required UserID uid, required JobID jobId}) async {
@@ -38,7 +38,7 @@ class JobsRepository {
     final entriesRef = _firestore.collection(entriesPath(uid));
     final entries = await entriesRef.get();
     for (final snapshot in entries.docs) {
-      final entry = Entry.fromJson(snapshot.data());
+      final entry = Entry.fromMap(snapshot.data(), snapshot.id);
       if (entry.jobId == jobId) {
         await snapshot.reference.delete();
       }
@@ -53,8 +53,9 @@ class JobsRepository {
       _firestore
           .doc(jobPath(uid, jobId))
           .withConverter<Job>(
-            fromFirestore: (snapshot, _) => Job.fromJson(snapshot.data()!),
-            toFirestore: (job, _) => job.toJson(),
+            fromFirestore: (snapshot, _) =>
+                Job.fromMap(snapshot.data()!, snapshot.id),
+            toFirestore: (job, _) => job.toMap(),
           )
           .snapshots()
           .map((snapshot) => snapshot.data()!);
@@ -65,8 +66,9 @@ class JobsRepository {
 
   Query<Job> queryJobs({required UserID uid}) =>
       _firestore.collection(jobsPath(uid)).withConverter(
-            fromFirestore: (snapshot, _) => Job.fromJson(snapshot.data()!),
-            toFirestore: (job, _) => job.toJson(),
+            fromFirestore: (snapshot, _) =>
+                Job.fromMap(snapshot.data()!, snapshot.id),
+            toFirestore: (job, _) => job.toMap(),
           );
 
   Future<List<Job>> fetchJobs({required UserID uid}) async {

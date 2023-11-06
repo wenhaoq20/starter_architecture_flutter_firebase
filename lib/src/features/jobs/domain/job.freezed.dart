@@ -111,9 +111,10 @@ class __$$JobImplCopyWithImpl<$Res> extends _$JobCopyWithImpl<$Res, _$JobImpl>
 
 /// @nodoc
 @JsonSerializable()
-class _$JobImpl with DiagnosticableTreeMixin implements _Job {
+class _$JobImpl extends _Job with DiagnosticableTreeMixin {
   const _$JobImpl(
-      {required this.id, required this.name, required this.ratePerHour});
+      {required this.id, required this.name, required this.ratePerHour})
+      : super._();
 
   factory _$JobImpl.fromJson(Map<String, dynamic> json) =>
       _$$JobImplFromJson(json);
@@ -169,11 +170,12 @@ class _$JobImpl with DiagnosticableTreeMixin implements _Job {
   }
 }
 
-abstract class _Job implements Job {
+abstract class _Job extends Job {
   const factory _Job(
       {required final String id,
       required final String name,
       required final int ratePerHour}) = _$JobImpl;
+  const _Job._() : super._();
 
   factory _Job.fromJson(Map<String, dynamic> json) = _$JobImpl.fromJson;
 
