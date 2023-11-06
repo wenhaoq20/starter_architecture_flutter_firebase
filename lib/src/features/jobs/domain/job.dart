@@ -1,8 +1,24 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+
+part 'job.freezed.dart';
+part 'job.g.dart';
 
 typedef JobID = String;
 
+@Freezed()
+class Job with _$Job {
+  const factory Job({
+    required JobID id,
+    required String name,
+    required int ratePerHour,
+  }) = _Job;
+
+  factory Job.fromJson(Map<String, dynamic> json) => _$JobFromJson(json);
+}
+
+
+/*
 @immutable
 class Job extends Equatable {
   const Job({required this.id, required this.name, required this.ratePerHour});
@@ -33,3 +49,4 @@ class Job extends Equatable {
     };
   }
 }
+*/

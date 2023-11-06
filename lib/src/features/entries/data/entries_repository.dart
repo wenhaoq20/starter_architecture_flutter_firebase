@@ -33,7 +33,7 @@ class EntriesRepository {
     required UserID uid,
     required Entry entry,
   }) =>
-      _firestore.doc(entryPath(uid, entry.id)).update(entry.toMap());
+      _firestore.doc(entryPath(uid, entry.id)).update(entry.toJson());
 
   // delete
   Future<void> deleteEntry({required UserID uid, required EntryID entryId}) =>
@@ -48,9 +48,8 @@ class EntriesRepository {
   Query<Entry> queryEntries({required UserID uid, JobID? jobId}) {
     Query<Entry> query =
         _firestore.collection(entriesPath(uid)).withConverter<Entry>(
-              fromFirestore: (snapshot, _) =>
-                  Entry.fromMap(snapshot.data()!, snapshot.id),
-              toFirestore: (entry, _) => entry.toMap(),
+              fromFirestore: (snapshot, _) => Entry.fromJson(snapshot.data()!),
+              toFirestore: (entry, _) => entry.toJson(),
             );
     if (jobId != null) {
       query = query.where('jobId', isEqualTo: jobId);
